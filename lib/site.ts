@@ -23,8 +23,10 @@ export type Post = {
   slug: string;
   title: string;
   description: string;
-  /** ISO date, YYYY-MM-DD */
+  /** ISO date, YYYY-MM-DD — first published */
   date: string;
+  /** ISO date, YYYY-MM-DD — last meaningful content update (defaults to `date`) */
+  updated?: string;
   kind: "Comparison" | "Tutorial";
 };
 
@@ -37,6 +39,7 @@ export const posts: Post[] = [
     description:
       "Pricing, specs, performance, ease of use and support compared across DigitalOcean and Vultr — plus which one I reach for, and when.",
     date: "2026-08-12",
+    updated: "2026-09-04",
     kind: "Comparison",
   },
   {
@@ -45,6 +48,7 @@ export const posts: Post[] = [
     description:
       "A copy-paste tutorial: provision a Hetzner Cloud server, harden it, install Docker, and ship a Node.js app with automatic HTTPS.",
     date: "2026-08-26",
+    updated: "2026-09-04",
     kind: "Tutorial",
   },
 ];

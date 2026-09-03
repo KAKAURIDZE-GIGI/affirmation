@@ -1,12 +1,12 @@
-import type { Metadata } from "next";
 import { siteConfig } from "@/lib/site";
+import { pageMeta } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Affiliate disclosure",
+export const metadata = pageMeta({
+  title: "Affiliate Disclosure — Host or Die",
   description:
     "How Host or Die makes money: some outbound links are affiliate links that pay a commission at no extra cost to you. Rankings are based on testing, not payouts.",
-  alternates: { canonical: "/disclosure/" },
-};
+  path: "/disclosure/",
+});
 
 export default function DisclosurePage() {
   return (

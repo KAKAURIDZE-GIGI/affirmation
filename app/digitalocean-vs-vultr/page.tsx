@@ -1,32 +1,48 @@
 import Link from "next/link";
-import type { Metadata } from "next";
 import AffiliateNotice from "@/components/AffiliateNotice";
-import { siteConfig } from "@/lib/site";
+import JsonLd from "@/components/JsonLd";
+import { siteConfig, posts } from "@/lib/site";
+import { pageMeta, articleSchema, breadcrumbSchema } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "DigitalOcean vs Vultr: a developer's comparison",
+const post = posts.find((p) => p.slug === "digitalocean-vs-vultr")!;
+
+export const metadata = pageMeta({
+  title: "DigitalOcean vs Vultr: Developer Comparison (2026)",
   description:
-    "DigitalOcean and Vultr compared on pricing, specs, performance, ease of use and support — with a quick verdict table and a clear recommendation for developers.",
-  alternates: { canonical: "/digitalocean-vs-vultr/" },
-  openGraph: {
-    type: "article",
-    title: "DigitalOcean vs Vultr: a developer's comparison",
-    description:
-      "Pricing, specs, performance, ease of use and support compared — plus which one I reach for, and when.",
-    url: "/digitalocean-vs-vultr/",
-  },
-};
+    "DigitalOcean or Vultr? A hands-on comparison of pricing, specs, real-world performance, support and ease of use — plus which one to pick, and when.",
+  path: "/digitalocean-vs-vultr/",
+  type: "article",
+  published: post.date,
+  modified: post.updated,
+});
+
+const schema = [
+  articleSchema({
+    headline: "DigitalOcean vs Vultr: a developer's comparison",
+    description: post.description,
+    path: "/digitalocean-vs-vultr/",
+    published: post.date,
+    modified: post.updated,
+  }),
+  breadcrumbSchema([
+    { name: "Home", path: "/" },
+    { name: "DigitalOcean vs Vultr", path: "/digitalocean-vs-vultr/" },
+  ]),
+];
 
 export default function Page() {
   return (
     <article className="prose">
+      <JsonLd data={schema} />
+
       <Link href="/" className="back-link">
         ← All posts
       </Link>
 
       <h1>DigitalOcean vs Vultr: a developer&apos;s comparison</h1>
       <p className="article-meta">
-        Comparison · published 12 August 2026 · pricing checked August 2026
+        Comparison · published 12 August 2026 · updated 4 September 2026 ·
+        pricing checked August 2026
       </p>
 
       <AffiliateNotice />
@@ -43,10 +59,14 @@ export default function Page() {
       <p>
         I run both accounts continuously and deploy the same reference stack (a
         Dockerised Node.js API in front of PostgreSQL, behind Nginx with a
-        Let&apos;s Encrypt certificate) to each. This post is the qualitative
-        side — pricing, features, workflow, support. The synthetic benchmark
-        numbers get their own section below; see the{" "}
-        <Link href="/about/">methodology</Link> for how those are collected.
+        Let&apos;s Encrypt certificate) to each — the same build covered in my{" "}
+        <Link href="/deploy-node-app-hetzner/">
+          Node.js on Hetzner with Docker walkthrough
+        </Link>
+        . This post is the qualitative side — pricing, features, workflow,
+        support. The synthetic benchmark numbers get their own section below;
+        see the <Link href="/about/">methodology</Link> for how those are
+        collected.
       </p>
 
       <div className="verdict">
@@ -296,7 +316,7 @@ export default function Page() {
       <h2>Pros &amp; cons</h2>
       <div className="two-col">
         <div className="pros-cons">
-          <h4>DigitalOcean — good</h4>
+          <h3>DigitalOcean — good</h3>
           <ul>
             <li>Best-in-class documentation and tutorials</li>
             <li>Polished UI, mature CLI/API/Terraform</li>
@@ -306,7 +326,7 @@ export default function Page() {
           </ul>
         </div>
         <div className="pros-cons">
-          <h4>DigitalOcean — less good</h4>
+          <h3>DigitalOcean — less good</h3>
           <ul>
             <li>Base Droplets are SSD, not NVMe</li>
             <li>No NVMe option at the low end</li>
@@ -316,7 +336,7 @@ export default function Page() {
           </ul>
         </div>
         <div className="pros-cons">
-          <h4>Vultr — good</h4>
+          <h3>Vultr — good</h3>
           <ul>
             <li>NVMe + high-clock cores near the entry price</li>
             <li>~32 locations, including rare regions</li>
@@ -326,7 +346,7 @@ export default function Page() {
           </ul>
         </div>
         <div className="pros-cons">
-          <h4>Vultr — less good</h4>
+          <h3>Vultr — less good</h3>
           <ul>
             <li>Smaller docs / community library</li>
             <li>Managed add-ons less polished than DigitalOcean&apos;s</li>

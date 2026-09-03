@@ -1,12 +1,13 @@
-import type { Metadata } from "next";
+import Link from "next/link";
 import { siteConfig } from "@/lib/site";
+import { pageMeta } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "About & methodology",
+export const metadata = pageMeta({
+  title: "VPS Benchmark Methodology — Host or Die",
   description:
-    "Who writes Host or Die, and exactly how each VPS and cloud host is tested — the tools, the metrics (CPU, disk I/O, network throughput, boot time) and the ground rules.",
-  alternates: { canonical: "/about/" },
-};
+    "How every VPS here is tested: the exact tools, the metrics (CPU, disk I/O, network, boot time), the test box, and the ground rules that keep rankings honest.",
+  path: "/about/",
+});
 
 export default function AboutPage() {
   return (
@@ -47,7 +48,12 @@ export default function AboutPage() {
         front of PostgreSQL, plus an Nginx reverse proxy with a Let&apos;s
         Encrypt certificate. This shakes out real-world friction — image pull
         speed, build time, whether the control panel fights you — before any
-        synthetic numbers are collected.
+        synthetic numbers are collected. My{" "}
+        <Link href="/deploy-node-app-hetzner/">
+          step-by-step guide to deploying a Node.js app with Docker on a Hetzner
+          VPS
+        </Link>{" "}
+        walks through the same deployment shape.
       </p>
 
       <h3>The measurements</h3>
@@ -141,7 +147,7 @@ export default function AboutPage() {
           <strong>Affiliate links never move the ranking.</strong> Where a
           referral link exists it&apos;s used; where one doesn&apos;t, the
           provider is still covered. See the{" "}
-          <a href="/disclosure/">disclosure page</a>.
+          <Link href="/disclosure/">disclosure page</Link>.
         </li>
         <li>
           <strong>Numbers include their setup.</strong> Plan, region, date,
@@ -155,7 +161,11 @@ export default function AboutPage() {
       </ul>
 
       <p>
-        Spotted a mistake or want a provider tested? Mail{" "}
+        You can see the method applied end to end in the{" "}
+        <Link href="/digitalocean-vs-vultr/">
+          DigitalOcean vs Vultr comparison
+        </Link>
+        . Spotted a mistake or want a provider tested? Mail{" "}
         <a href={`mailto:${siteConfig.contactEmail}`}>{siteConfig.contactEmail}</a>.
       </p>
     </article>

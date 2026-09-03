@@ -1,30 +1,48 @@
 import Link from "next/link";
-import type { Metadata } from "next";
-import { siteConfig } from "@/lib/site";
+import JsonLd from "@/components/JsonLd";
+import { siteConfig, posts } from "@/lib/site";
+import { pageMeta, articleSchema, breadcrumbSchema } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Deploy a Node.js app on a Hetzner VPS with Docker",
+const post = posts.find((p) => p.slug === "deploy-node-app-hetzner")!;
+
+export const metadata = pageMeta({
+  title: "Deploy a Node.js App on a Hetzner VPS with Docker",
   description:
-    "Step-by-step: provision a Hetzner Cloud server, create a non-root user, harden SSH, install Docker, containerise a Node.js app, and serve it over HTTPS with Caddy.",
-  alternates: { canonical: "/deploy-node-app-hetzner/" },
-  openGraph: {
-    type: "article",
-    title: "Deploy a Node.js app on a Hetzner VPS with Docker",
-    description:
-      "Provision, harden, install Docker, and ship a Node.js app with automatic HTTPS on a Hetzner Cloud server.",
-    url: "/deploy-node-app-hetzner/",
-  },
-};
+    "Copy-paste tutorial: provision a Hetzner VPS, harden it, install Docker, and deploy a Node.js app with automatic HTTPS via Caddy. Tested on Ubuntu 24.04.",
+  path: "/deploy-node-app-hetzner/",
+  type: "article",
+  published: post.date,
+  modified: post.updated,
+});
+
+const schema = [
+  articleSchema({
+    headline: "Deploy a Node.js app on a Hetzner VPS with Docker",
+    description: post.description,
+    path: "/deploy-node-app-hetzner/",
+    published: post.date,
+    modified: post.updated,
+  }),
+  breadcrumbSchema([
+    { name: "Home", path: "/" },
+    { name: "Deploy Node.js on Hetzner with Docker", path: "/deploy-node-app-hetzner/" },
+  ]),
+];
 
 export default function Page() {
   return (
     <article className="prose">
+      <JsonLd data={schema} />
+
       <Link href="/" className="back-link">
         ← All posts
       </Link>
 
       <h1>Deploy a Node.js app on a Hetzner VPS with Docker</h1>
-      <p className="article-meta">Tutorial · published 26 August 2026 · tested on Ubuntu 24.04 LTS</p>
+      <p className="article-meta">
+        Tutorial · published 26 August 2026 · updated 4 September 2026 · tested
+        on Ubuntu 24.04 LTS
+      </p>
 
       <p>
         Hetzner Cloud is my default for small-to-medium production boxes: an
@@ -32,10 +50,15 @@ export default function Page() {
         €3.29/month and an x86 <code>CX22</code> with the same specs is about
         €3.79/month, both on fast NVMe. This walkthrough takes a fresh server to
         a running, HTTPS-served Node.js app. Every command here was run on a
-        clean Ubuntu&nbsp;24.04 <code>CX22</code>.
+        clean Ubuntu&nbsp;24.04 <code>CX22</code>. If you&apos;re still choosing
+        a provider, my{" "}
+        <Link href="/digitalocean-vs-vultr/">
+          DigitalOcean vs Vultr comparison
+        </Link>{" "}
+        covers how the mainstream options stack up.
       </p>
 
-      <h3>What you&apos;ll end up with</h3>
+      <h2>What you&apos;ll end up with</h2>
       <ul>
         <li>A hardened Ubuntu 24.04 server (non-root sudo user, key-only SSH, firewall).</li>
         <li>Docker Engine + Compose plugin from Docker&apos;s official repo.</li>
@@ -43,7 +66,7 @@ export default function Page() {
         <li>Caddy in front of it, terminating TLS with an auto-renewing Let&apos;s Encrypt certificate.</li>
       </ul>
 
-      <h3>Prerequisites</h3>
+      <h2>Prerequisites</h2>
       <ul>
         <li>An SSH key pair on your machine (<code>ssh-keygen -t ed25519</code> if you don&apos;t have one).</li>
         <li>A domain name you can add a DNS record to (needed for HTTPS in step&nbsp;9).</li>

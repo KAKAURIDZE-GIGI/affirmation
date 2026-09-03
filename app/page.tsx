@@ -1,13 +1,13 @@
 import Link from "next/link";
-import type { Metadata } from "next";
 import { siteConfig, sortedPosts, formatDate } from "@/lib/site";
+import { pageMeta } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  // Homepage keeps the full site title rather than the "%s — Host or Die" template.
-  title: siteConfig.title,
-  description: siteConfig.description,
-  alternates: { canonical: "/" },
-};
+export const metadata = pageMeta({
+  title: "VPS Hosting Reviews for Developers — Host or Die",
+  description:
+    "Developer-run VPS and cloud hosting reviews: the same deployment and benchmarks on every provider — CPU, disk I/O, network, boot time. No sponsored rankings.",
+  path: "/",
+});
 
 export default function HomePage() {
   return (
