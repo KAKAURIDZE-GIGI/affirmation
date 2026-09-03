@@ -1,0 +1,14 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    { "source": "/", "destination": "/en/", "permanent": false },
+    { "source": "/about", "destination": "/en/about/", "permanent": true },
+    { "source": "/about/", "destination": "/en/about/", "permanent": true },
+    { "source": "/disclosure", "destination": "/en/disclosure/", "permanent": true },
+    { "source": "/disclosure/", "destination": "/en/disclosure/", "permanent": true },
+    { "source": "/digitalocean-vs-vultr", "destination": "/en/digitalocean-vs-vultr/", "permanent": true },
+    { "source": "/digitalocean-vs-vultr/", "destination": "/en/digitalocean-vs-vultr/", "permanent": true },
+    { "source": "/deploy-node-app-hetzner", "destination": "/en/deploy-node-app-hetzner/", "permanent": true },
+    { "source": "/deploy-node-app-hetzner/", "destination": "/en/deploy-node-app-hetzner/", "permanent": true }
+  ]
+}

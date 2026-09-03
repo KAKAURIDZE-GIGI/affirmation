@@ -2,6 +2,8 @@
 // Site-wide configuration. Edit these values before you publish.
 // -----------------------------------------------------------------------------
 
+import { LOCALE_HREFLANG, type Locale } from "./i18n";
+
 export const siteConfig = {
   name: "Host or Die",
   title:
@@ -57,11 +59,14 @@ export const sortedPosts = [...posts].sort((a, b) =>
   a.date < b.date ? 1 : -1,
 );
 
-export function formatDate(iso: string): string {
-  return new Date(iso + "T00:00:00Z").toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    timeZone: "UTC",
-  });
+export function formatDate(iso: string, locale: Locale = "en"): string {
+  return new Date(iso + "T00:00:00Z").toLocaleDateString(
+    LOCALE_HREFLANG[locale],
+    {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      timeZone: "UTC",
+    },
+  );
 }
