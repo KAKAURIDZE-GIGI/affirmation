@@ -75,8 +75,9 @@ export default function DisclosurePage() {
         As of September 2026, this site has an active affiliate relationship
         with <strong>DigitalOcean</strong> (via Awin) and a referral
         relationship with <strong>Vultr</strong>. Links to Hetzner and any other
-        providers mentioned are not currently affiliate links — there is simply
-        no partnership set up yet. This section is updated as that changes.
+        providers mentioned are not affiliate links: Hetzner discontinued its
+        referral programme in 2026, and no arrangement is in place with the
+        others. This section is updated as that changes.
       </p>
 
       <h2>FTC &amp; advertising standards</h2>

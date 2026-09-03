@@ -52,7 +52,7 @@ export default function Page() {
 
       <h2>1. Create the server</h2>
       <p>
-        {/* Plain link - no affiliate program yet */}
+        {/* Plain link — Hetzner's referral programme ended in 2026; not tracked */}
         <a
           href="https://www.hetzner.com/cloud"
           rel="noopener"
@@ -374,10 +374,11 @@ docker stats --no-stream       # quick CPU / memory snapshot`}</code>
         <span className="callout-label">Note</span>
         <p>
           I use Hetzner for my own servers and recommend it here because the
-          price-to-NVMe-performance ratio is the best I&apos;ve measured. The
-          link above is a plain link — there is no Hetzner affiliate programme
-          in place, so nothing on this page earns a commission. See the{" "}
-          <Link href="/disclosure/">disclosure</Link> for the full picture.
+          price-to-NVMe-performance ratio is the best I&apos;ve measured.
+          Hetzner discontinued its referral programme in 2026, so the link above
+          is a plain, untracked link and nothing on this page earns a
+          commission. See the <Link href="/disclosure/">disclosure</Link> for
+          the full picture.
         </p>
       </div>
 
