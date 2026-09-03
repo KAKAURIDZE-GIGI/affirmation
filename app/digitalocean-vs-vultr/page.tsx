@@ -375,9 +375,12 @@ export default function Page() {
           — often includes free credit for new accounts.
         </li>
         <li>
-          {/* AFFILIATE LINK: Vultr — replace href="#" with your approved
-              AWIN / Vultr referral URL. Keep rel="sponsored nofollow". */}
-          <a href="#" rel="sponsored nofollow noopener">
+          {/* AFFILIATE LINK: Vultr — referral link (ref=9921214). */}
+          <a
+            href="https://www.vultr.com/?ref=9921214"
+            rel="sponsored nofollow noopener"
+            target="_blank"
+          >
             Create a Vultr account
           </a>{" "}
           — new-account promo credit is common.

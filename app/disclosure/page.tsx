@@ -69,7 +69,11 @@ export default function DisclosurePage() {
         </a>{" "}
         affiliate network. Where a recommendation carries an affiliate link, the
         provider it points to is named in the disclosure notice at the top of
-        that page. This list is kept current as programmes are added or dropped.
+        that page.
+      </p>
+      <p>
+        Active referral partner at the moment: <strong>Vultr</strong>. This list
+        is kept current as programmes are added or dropped.
       </p>
 
       <h2>FTC &amp; advertising standards</h2>
