@@ -1,6 +1,5 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import AffiliateNotice from "@/components/AffiliateNotice";
 import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -26,8 +25,6 @@ export default function Page() {
 
       <h1>Deploy a Node.js app on a Hetzner VPS with Docker</h1>
       <p className="article-meta">Tutorial · published 26 August 2026 · tested on Ubuntu 24.04 LTS</p>
-
-      <AffiliateNotice />
 
       <p>
         Hetzner Cloud is my default for small-to-medium production boxes: an
@@ -55,9 +52,12 @@ export default function Page() {
 
       <h2>1. Create the server</h2>
       <p>
-        {/* AFFILIATE LINK: Hetzner — replace href="#" with your approved
-            Hetzner referral / AWIN link. Keep rel="sponsored nofollow". */}
-        <a href="#" rel="sponsored nofollow noopener">
+        {/* Plain link - no affiliate program yet */}
+        <a
+          href="https://www.hetzner.com/cloud"
+          rel="noopener"
+          target="_blank"
+        >
           Sign up for Hetzner Cloud
         </a>{" "}
         and create a new <strong>Project</strong>. In the project:
@@ -371,12 +371,13 @@ docker stats --no-stream       # quick CPU / memory snapshot`}</code>
       </ul>
 
       <div className="callout" role="note">
-        <span className="callout-label">Disclosure</span>
+        <span className="callout-label">Note</span>
         <p>
-          The Hetzner sign-up link above is an affiliate link — see the{" "}
-          <Link href="/disclosure/">full disclosure</Link>. I use Hetzner for my
-          own servers and recommend it here because the price-to-NVMe-performance
-          ratio is the best I&apos;ve measured, not because of the referral.
+          I use Hetzner for my own servers and recommend it here because the
+          price-to-NVMe-performance ratio is the best I&apos;ve measured. The
+          link above is a plain link — there is no Hetzner affiliate programme
+          in place, so nothing on this page earns a commission. See the{" "}
+          <Link href="/disclosure/">disclosure</Link> for the full picture.
         </p>
       </div>
 

@@ -339,55 +339,94 @@ export default function Page() {
 
       <h2>Recommendation</h2>
       <p>
-        For the majority of developers reading this — you&apos;re deploying a
-        web app or an API, you want good docs, and you might want a managed
-        database or a PaaS later — <strong>DigitalOcean</strong> is the one
-        I&apos;d start with. The workflow is smoother and the ecosystem saves
-        you time that&apos;s worth more than a few dollars a month.
+        <strong>Pick DigitalOcean if</strong> you&apos;re deploying a typical
+        web app or API and you value the documentation, the polished console,
+        and having managed Postgres, a load balancer or the App Platform PaaS
+        one click away. The workflow is smoother end to end, and for most teams
+        that saved time is worth more than the few dollars a month Vultr shaves
+        off the bill.
       </p>
       <p>
-        Choose <strong>Vultr</strong> when the specifics point that way: you
-        want the most CPU and NVMe per dollar, you need a region DigitalOcean
-        doesn&apos;t have, you need to boot a custom ISO, or you want bare metal
-        or a GPU without changing providers. The hardware on the High Frequency
-        and High Performance lines is genuinely a step up from a base Droplet.
+        <strong>Pick Vultr if</strong> the specifics pull you there: you want
+        the most CPU and NVMe per dollar, you need a region DigitalOcean
+        doesn&apos;t operate in, you need to boot a custom ISO, or you want bare
+        metal or a fractional GPU without leaving the panel. The High Frequency
+        and High Performance instances are genuinely faster hardware than a base
+        Droplet, not just a cheaper label.
       </p>
       <p>
-        Because both bill hourly, the low-risk move is to run your own workload
-        on each for a few days before deciding. That&apos;s exactly what the
-        benchmark round here is doing; the numbers will land in the section
-        above.
+        Still on the fence? Both bill hourly with no minimum, so the honest
+        answer is to run your own workload on each for a few days and keep the
+        one that felt better. Nothing here is a decision you can&apos;t reverse
+        in an afternoon.
       </p>
+      <p>
+        {/* TODO: replace with real AWIN deep link */}
+        One note on the disclosure side: DigitalOcean&apos;s affiliate programme
+        pays out over a customer&apos;s first year, which matches how these
+        accounts actually get used — you spin something up and keep it running.
+        If you&apos;re leaning DigitalOcean after reading this,{" "}
+        <a
+          href="https://www.digitalocean.com/"
+          rel="sponsored nofollow noopener"
+          target="_blank"
+        >
+          start here
+        </a>
+        .
+      </p>
+      <aside className="callout" role="note">
+        <span className="callout-label">Vultr credit</span>
+        <p>
+          Vultr is currently running a promo: sign up{" "}
+          {/* Vultr referral link (ref=9921215-9J) */}
+          <a
+            href="https://www.vultr.com/?ref=9921215-9J"
+            rel="sponsored nofollow noopener"
+            target="_blank"
+          >
+            through this link
+          </a>{" "}
+          and you get $300 in credit to try the platform yourself — no strings
+          beyond linking a payment method. It&apos;s a limited-time offer and
+          may not always be active; if the amount shown when you click through
+          is different, that&apos;s why.
+        </p>
+      </aside>
 
       <h2>Where to sign up</h2>
       <p>
-        The links below are affiliate links: if you create an account through
-        one, this site may earn a commission at no cost to you, and some carry a
-        sign-up credit. See the <Link href="/disclosure/">disclosure</Link>.
+        The two links below are tracked: DigitalOcean is an affiliate link (via
+        Awin), Vultr is a referral link. If you create an account through one,
+        this site may earn a commission at no cost to you. See the{" "}
+        <Link href="/disclosure/">disclosure</Link>.
       </p>
       <ul>
         <li>
-          {/* AFFILIATE LINK: DigitalOcean — replace href="#" with your approved
-              AWIN / DigitalOcean referral URL. Keep rel="sponsored nofollow". */}
-          <a href="#" rel="sponsored nofollow noopener">
+          {/* TODO: replace with real AWIN deep link */}
+          <a
+            href="https://www.digitalocean.com/"
+            rel="sponsored nofollow noopener"
+            target="_blank"
+          >
             Create a DigitalOcean account
           </a>{" "}
-          — often includes free credit for new accounts.
+          — new accounts often start with free credit.
         </li>
         <li>
-          {/* AFFILIATE LINK: Vultr — referral link (ref=9921214). */}
+          {/* Vultr referral link (ref=9921215-9J) */}
           <a
-            href="https://www.vultr.com/?ref=9921214"
+            href="https://www.vultr.com/?ref=9921215-9J"
             rel="sponsored nofollow noopener"
             target="_blank"
           >
             Create a Vultr account
           </a>{" "}
-          — new-account promo credit is common.
+          — currently $300 in trial credit (see the note above).
         </li>
       </ul>
       <p>
-        Prefer not to use a referral link? Going directly to{" "}
+        Prefer not to use a tracked link? Going directly to{" "}
         <code>digitalocean.com</code> or <code>vultr.com</code> costs you the
         same and the review stands either way.
       </p>

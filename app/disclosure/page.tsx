@@ -65,15 +65,18 @@ export default function DisclosurePage() {
         Host or Die earns referral commission through affiliate programmes run
         directly by hosting providers and through the{" "}
         <a href="https://www.awin.com/" rel="nofollow noopener" target="_blank">
-          AWIN
+          Awin
         </a>{" "}
         affiliate network. Where a recommendation carries an affiliate link, the
         provider it points to is named in the disclosure notice at the top of
         that page.
       </p>
       <p>
-        Active referral partner at the moment: <strong>Vultr</strong>. This list
-        is kept current as programmes are added or dropped.
+        As of September 2026, this site has an active affiliate relationship
+        with <strong>DigitalOcean</strong> (via Awin) and a referral
+        relationship with <strong>Vultr</strong>. Links to Hetzner and any other
+        providers mentioned are not currently affiliate links — there is simply
+        no partnership set up yet. This section is updated as that changes.
       </p>
 
       <h2>FTC &amp; advertising standards</h2>
