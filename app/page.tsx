@@ -14,7 +14,10 @@ export default function HomePage() {
     <>
       <section className="hero">
         <p className="eyebrow">Independent · benchmark-based</p>
-        <h1>VPS &amp; cloud hosting reviews for developers</h1>
+        <h1>
+          VPS &amp; cloud hosting reviews{" "}
+          <span className="accent-text">for developers</span>
+        </h1>
         <p className="lead">
           I deploy real applications to real servers, run the same battery of
           benchmarks on each one — CPU, disk I/O, network throughput, boot time
@@ -28,6 +31,23 @@ export default function HomePage() {
           <Link href="/about/">the methodology</Link>, and here is the{" "}
           <Link href="/disclosure/">affiliate disclosure</Link>.
         </p>
+        <pre aria-hidden="true">
+          <code>
+            <span className="c-prompt">$</span> ./review --provider any
+            --sponsored=false{"\n"}
+            <span className="c-out">
+              → same box, same benchmarks, every provider
+            </span>
+            {"\n"}
+            <span className="c-out">
+              → cpu · disk i/o · network · boot time
+            </span>
+            {"\n\n"}
+            <span className="c-prompt">$</span> grep -c sponsored verdict.md
+            {"\n"}
+            <span className="c-out">0</span>
+          </code>
+        </pre>
       </section>
 
       <section aria-labelledby="latest">

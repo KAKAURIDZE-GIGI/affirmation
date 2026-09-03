@@ -1,19 +1,18 @@
 import Link from "next/link";
 import { siteConfig } from "@/lib/site";
+import NavLinks from "./NavLinks";
 
 export default function Header() {
   return (
     <header className="site-header">
       <div className="container">
         <Link href="/" className="brand">
-          <span className="prompt">$&nbsp;</span>
+          <span className="prompt" aria-hidden="true">
+            $&nbsp;
+          </span>
           {siteConfig.name}
         </Link>
-        <nav className="site-nav" aria-label="Primary">
-          <Link href="/">Home</Link>
-          <Link href="/about/">About</Link>
-          <Link href="/disclosure/">Disclosure</Link>
-        </nav>
+        <NavLinks />
       </div>
     </header>
   );

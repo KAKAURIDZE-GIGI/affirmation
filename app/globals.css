@@ -1,23 +1,33 @@
 /* ---------------------------------------------------------------------------
    Host or Die — global styles
    Plain CSS, no framework. Dark-first with a light-mode override.
+   Animations are CSS-only and gated behind prefers-reduced-motion.
    --------------------------------------------------------------------------- */
 
 :root {
   --bg: #0b0d10;
   --bg-elev: #14171c;
+  --bg-elev-2: #191d24;
   --bg-code: #0f1216;
   --border: #232830;
+  --border-strong: #313742;
   --text: #e6e8eb;
   --text-dim: #9aa4b2;
   --link: #7dd3fc;
   --link-strong: #38bdf8;
   --term: #4ade80;
   --btn-fg: #06131c;
+  --glow: color-mix(in srgb, var(--link-strong) 13%, transparent);
+  --grid-line: color-mix(in srgb, var(--text) 4%, transparent);
+  --shadow: 0 10px 34px -14px rgba(0, 0, 0, 0.55);
 
   --maxw: 1080px;
   --prose: 44rem;
   --radius: 10px;
+  --radius-lg: 14px;
+
+  --ease: cubic-bezier(0.2, 0.65, 0.2, 1);
+  --dur: 0.55s;
 
   --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
     "Liberation Mono", monospace;
@@ -29,14 +39,19 @@
   :root {
     --bg: #ffffff;
     --bg-elev: #f6f7f9;
+    --bg-elev-2: #eef0f3;
     --bg-code: #f4f5f7;
     --border: #e4e7ec;
+    --border-strong: #d3d8df;
     --text: #1a1d21;
     --text-dim: #5b636e;
     --link: #0369a1;
     --link-strong: #075985;
     --term: #15803d;
     --btn-fg: #f8fafc;
+    --glow: color-mix(in srgb, var(--link-strong) 8%, transparent);
+    --grid-line: color-mix(in srgb, var(--text) 3.5%, transparent);
+    --shadow: 0 10px 30px -16px rgba(15, 23, 42, 0.28);
   }
 }
 
@@ -46,17 +61,34 @@
 
 html {
   -webkit-text-size-adjust: 100%;
+  scroll-padding-top: 5rem;
 }
 
 body {
   margin: 0;
-  background: var(--bg);
+  min-height: 100dvh;
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(55rem 34rem at 50% -12rem, var(--glow), transparent 70%),
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 100% 100%, 44px 44px, 44px 44px;
+  background-position: center top;
+  background-repeat: no-repeat, repeat, repeat;
+  background-attachment: fixed;
   color: var(--text);
   font-family: var(--sans);
   font-size: 16px;
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+
+img,
+svg,
+video {
+  max-width: 100%;
+  height: auto;
 }
 
 .container {
@@ -66,44 +98,75 @@ body {
 }
 
 main.container {
-  padding-top: 2.5rem;
-  padding-bottom: 4rem;
+  padding-top: 2.75rem;
+  padding-bottom: 4.5rem;
 }
 
 a {
   color: var(--link);
   text-underline-offset: 2px;
+  transition: color 0.18s var(--ease);
 }
 a:hover {
   color: var(--link-strong);
+}
+
+:focus-visible {
+  outline: 2px solid var(--link-strong);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--term) 26%, transparent);
+  color: var(--text);
 }
 
 h1,
 h2,
 h3,
 h4 {
-  line-height: 1.25;
+  font-family: var(--mono);
+  line-height: 1.24;
   font-weight: 700;
   margin: 2rem 0 0.75rem;
+  text-wrap: balance;
 }
 h1 {
-  font-size: clamp(1.9rem, 1.4rem + 2.2vw, 2.6rem);
+  font-size: clamp(1.8rem, 1.25rem + 2.4vw, 2.5rem);
   margin-top: 0;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.015em;
 }
 h2 {
-  font-size: 1.5rem;
+  font-size: clamp(1.3rem, 1.12rem + 0.8vw, 1.5rem);
   letter-spacing: -0.01em;
   padding-top: 0.5rem;
+  scroll-margin-top: 5rem;
 }
 h3 {
-  font-size: 1.2rem;
+  font-size: 1.15rem;
+  scroll-margin-top: 5rem;
+}
+
+/* Article headings echo their Markdown source — a familiar cue for devs. */
+.prose > h2::before {
+  content: "## " / "";
+  color: var(--text-dim);
+  font-weight: 400;
+}
+.prose > h3::before {
+  content: "### " / "";
+  color: var(--text-dim);
+  font-weight: 400;
 }
 
 p,
 ul,
 ol {
   margin: 0 0 1rem;
+}
+p {
+  text-wrap: pretty;
 }
 
 hr {
@@ -112,7 +175,7 @@ hr {
   margin: 2.5rem 0;
 }
 
-/* ---- Skip link ---------------------------------------------------------- */
+/* ---- Skip link ------------------------------------------------------------ */
 
 .skip-link {
   position: absolute;
@@ -129,14 +192,17 @@ hr {
   left: 0;
 }
 
-/* ---- Header ----------------------------------------------------------- */
+/* ---- Header ------------------------------------------------------------- */
 
 .site-header {
-  border-bottom: 1px solid var(--border);
-  background: var(--bg);
   position: sticky;
   top: 0;
   z-index: 20;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  -webkit-backdrop-filter: saturate(1.4) blur(10px);
+  backdrop-filter: saturate(1.4) blur(10px);
 }
 .site-header .container {
   display: flex;
@@ -146,30 +212,62 @@ hr {
   min-height: 60px;
 }
 .brand {
+  display: inline-flex;
+  align-items: baseline;
   font-family: var(--mono);
   font-weight: 700;
   font-size: 1.05rem;
   color: var(--text);
   text-decoration: none;
   letter-spacing: -0.01em;
+  white-space: nowrap;
+  transition: opacity 0.18s var(--ease);
+}
+.brand:hover {
+  color: var(--text);
+  opacity: 0.75;
 }
 .brand .prompt {
   color: var(--term);
 }
 .site-nav {
   display: flex;
-  gap: 1.25rem;
-  font-size: 0.95rem;
+  gap: 1.35rem;
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  text-transform: lowercase;
 }
 .site-nav a {
+  position: relative;
   color: var(--text-dim);
   text-decoration: none;
+  padding: 0.35rem 0;
+}
+.site-nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s var(--ease);
 }
 .site-nav a:hover {
   color: var(--text);
 }
+.site-nav a:hover::after,
+.site-nav a[aria-current="page"]::after {
+  transform: scaleX(1);
+}
+.site-nav a[aria-current="page"] {
+  color: var(--text);
+}
 
-/* ---- Footer ----------------------------------------------------------- */
+/* ---- Footer ---------------------------------------------------------------- */
 
 .site-footer {
   border-top: 1px solid var(--border);
@@ -196,13 +294,17 @@ hr {
   gap: 1.25rem;
 }
 
-/* ---- Hero / homepage ------------------------------------------------- */
+/* ---- Hero / homepage --------------------------------------------------- */
 
 .hero {
   max-width: var(--prose);
 }
+.hero pre {
+  margin-top: 1.6rem;
+  font-size: 0.82rem;
+}
 .hero .lead {
-  font-size: 1.15rem;
+  font-size: clamp(1.05rem, 1rem + 0.5vw, 1.18rem);
   color: var(--text-dim);
 }
 .eyebrow {
@@ -213,8 +315,27 @@ hr {
   color: var(--term);
   margin: 0 0 0.75rem;
 }
+.eyebrow::after {
+  content: "\2589";
+  margin-left: 0.35em;
+  animation: hod-blink 1.1s steps(1, end) infinite;
+}
+.accent-text {
+  color: var(--link-strong);
+}
+@supports (
+  (-webkit-background-clip: text) or (background-clip: text)
+) {
+  .accent-text {
+    background: linear-gradient(115deg, var(--link), var(--term));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+}
 
-/* ---- Post list ------------------------------------------------------- */
+/* ---- Post list ---------------------------------------------------------- */
 
 .post-list {
   list-style: none;
@@ -224,14 +345,19 @@ hr {
   gap: 1rem;
 }
 .post-card {
+  position: relative;
   border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1.25rem 1.35rem;
+  border-radius: var(--radius-lg);
+  padding: 1.3rem 1.4rem;
   background: var(--bg-elev);
-  transition: border-color 0.15s ease;
+  transition: transform 0.25s var(--ease), border-color 0.25s var(--ease),
+    box-shadow 0.25s var(--ease), background 0.25s var(--ease);
 }
 .post-card:hover {
+  transform: translateY(-3px);
   border-color: var(--link-strong);
+  background: var(--bg-elev-2);
+  box-shadow: var(--shadow);
 }
 .post-card .meta {
   font-family: var(--mono);
@@ -239,7 +365,7 @@ hr {
   color: var(--text-dim);
   display: flex;
   gap: 0.75rem;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.45rem;
 }
 .post-card .badge {
   color: var(--term);
@@ -252,8 +378,17 @@ hr {
   color: var(--text);
   text-decoration: none;
 }
-.post-card h3 a:hover {
+.post-card h3 a::after {
+  content: " \2192" / "";
+  display: inline-block;
   color: var(--link);
+  transition: transform 0.25s var(--ease);
+}
+.post-card:hover h3 a {
+  color: var(--link);
+}
+.post-card:hover h3 a::after {
+  transform: translateX(4px);
 }
 .post-card p {
   margin: 0;
@@ -261,13 +396,13 @@ hr {
   font-size: 0.95rem;
 }
 
-/* ---- Signup form -------------------------------------------------------- */
+/* ---- Signup form --------------------------------------------------------- */
 
 .signup {
-  margin: 2.5rem 0 0;
+  margin: 2.75rem 0 0;
   border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1.5rem;
+  border-radius: var(--radius-lg);
+  padding: 1.6rem;
   background: var(--bg-elev);
   max-width: var(--prose);
 }
@@ -283,44 +418,58 @@ hr {
 }
 .signup input[type="email"] {
   flex: 1 1 16rem;
-  padding: 0.6rem 0.75rem;
-  border-radius: 8px;
-  border: 1px solid var(--border);
+  min-width: 0;
+  padding: 0.7rem 0.8rem;
+  border-radius: 9px;
+  border: 1px solid var(--border-strong);
   background: var(--bg);
   color: var(--text);
+  font: inherit;
   font-size: 0.95rem;
+  transition: border-color 0.18s var(--ease), box-shadow 0.18s var(--ease);
+}
+.signup input[type="email"]::placeholder {
+  color: var(--text-dim);
 }
 .signup input[type="email"]:focus {
-  outline: 2px solid var(--link-strong);
-  outline-offset: 1px;
+  outline: none;
+  border-color: var(--link-strong);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--link-strong) 25%, transparent);
 }
 .signup-note {
-  margin: 0.75rem 0 0;
+  margin: 0.8rem 0 0;
   font-size: 0.82rem;
   color: var(--text-dim);
 }
 
-/* ---- Buttons --------------------------------------------------------- */
+/* ---- Buttons ---------------------------------------------------------- */
 
 .btn {
   display: inline-block;
   background: var(--link-strong);
   color: var(--btn-fg);
-  padding: 0.6rem 1.05rem;
-  border-radius: 8px;
+  padding: 0.7rem 1.15rem;
+  border-radius: 9px;
   border: 0;
   font: inherit;
   font-weight: 600;
   font-size: 0.95rem;
+  line-height: 1.2;
   text-decoration: none;
   cursor: pointer;
+  transition: transform 0.18s var(--ease), box-shadow 0.18s var(--ease),
+    opacity 0.18s var(--ease);
 }
 .btn:hover {
   color: var(--btn-fg);
-  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 22px -10px var(--link-strong);
+}
+.btn:active {
+  transform: translateY(0);
 }
 
-/* ---- Prose (article body) ----------------------------------------------- */
+/* ---- Prose (article body) --------------------------------------------- */
 
 .prose {
   max-width: var(--prose);
@@ -338,11 +487,22 @@ hr {
 .prose strong {
   color: var(--text);
 }
+.prose a {
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, currentColor 45%, transparent);
+}
+.prose a:hover {
+  text-decoration-color: currentColor;
+}
 .article-meta {
   font-family: var(--mono);
   font-size: 0.82rem;
   color: var(--text-dim);
   margin: 0 0 1.5rem;
+}
+.article-meta::before {
+  content: "// " / "";
+  opacity: 0.7;
 }
 
 /* ---- Code ----------------------------------------------------------- */
@@ -356,26 +516,53 @@ code {
   padding: 0.1em 0.38em;
 }
 pre {
-  background: var(--bg-code);
+  position: relative;
+  max-width: 100%;
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 1rem 1.15rem;
+  padding: 2.5rem 1.15rem 1rem;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   font-size: 0.86rem;
   line-height: 1.55;
+  tab-size: 2;
   margin: 0 0 1.25rem;
+  /* Terminal-window chrome drawn as backgrounds so it stays pinned to the
+     visible box even when a long line scrolls horizontally. */
+  background-color: var(--bg-code);
+  background-image:
+    radial-gradient(circle 4px at 15px 16px, #ff5f56 96%, transparent),
+    radial-gradient(circle 4px at 33px 16px, #ffbd2e 96%, transparent),
+    radial-gradient(circle 4px at 51px 16px, #27c93f 96%, transparent),
+    linear-gradient(var(--border) 0 0),
+    linear-gradient(var(--bg-elev) 0 0);
+  background-repeat: no-repeat;
+  background-size: auto, auto, auto, 100% 1px, 100% 32px;
+  background-position: 0 0, 0 0, 0 0, 0 32px, 0 0;
 }
 pre code {
+  display: block;
   background: none;
   border: 0;
   padding: 0;
   font-size: inherit;
+}
+.c-prompt {
+  color: var(--term);
+}
+.c-out {
+  color: var(--text-dim);
+}
+.c-comment {
+  color: color-mix(in srgb, var(--text-dim) 80%, transparent);
+  font-style: italic;
 }
 
 /* ---- Tables ------------------------------------------------------------- */
 
 .table-wrap {
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   border: 1px solid var(--border);
   border-radius: var(--radius);
   margin: 0 0 1.5rem;
@@ -388,7 +575,7 @@ table {
 th,
 td {
   text-align: left;
-  padding: 0.6rem 0.85rem;
+  padding: 0.65rem 0.9rem;
   border-bottom: 1px solid var(--border);
   vertical-align: top;
 }
@@ -397,12 +584,19 @@ thead th {
   font-family: var(--mono);
   font-size: 0.8rem;
   letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+tbody tr {
+  transition: background 0.15s var(--ease);
+}
+tbody tr:hover {
+  background: var(--bg-elev);
 }
 tbody tr:last-child td {
   border-bottom: 0;
 }
 
-/* ---- Callout / disclosure box ---------------------------------------- */
+/* ---- Callout / disclosure box -------------------------------------------- */
 
 .callout {
   border: 1px solid var(--border);
@@ -429,12 +623,12 @@ tbody tr:last-child td {
   margin-bottom: 0.4rem;
 }
 
-/* ---- Utilities ----------------------------------------------------------- */
+/* ---- Layout helpers ----------------------------------------------------- */
 
 .verdict {
   border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1.15rem 1.35rem;
+  border-radius: var(--radius-lg);
+  padding: 1.2rem 1.4rem;
   background: var(--bg-elev);
   margin: 0 0 1.75rem;
 }
@@ -443,13 +637,17 @@ tbody tr:last-child td {
   margin-top: 0;
 }
 .back-link {
+  display: inline-block;
   font-family: var(--mono);
   font-size: 0.85rem;
   color: var(--text-dim);
   text-decoration: none;
+  margin-bottom: 0.5rem;
+  transition: transform 0.2s var(--ease), color 0.18s var(--ease);
 }
 .back-link:hover {
   color: var(--text);
+  transform: translateX(-3px);
 }
 .two-col {
   display: grid;
@@ -473,4 +671,133 @@ tbody tr:last-child td {
 }
 .pros-cons ul {
   margin: 0;
+}
+
+/* ---- Mobile ------------------------------------------------------------- */
+
+@media (max-width: 640px) {
+  main.container {
+    padding-top: 1.75rem;
+    padding-bottom: 3rem;
+  }
+  .container {
+    padding-inline: 1.1rem;
+  }
+  h1 {
+    margin-bottom: 0.6rem;
+  }
+  .signup {
+    padding: 1.25rem;
+  }
+  .signup input[type="email"],
+  .btn {
+    flex: 1 1 100%;
+    text-align: center;
+  }
+  pre {
+    font-size: 0.8rem;
+    padding: 2.4rem 1rem 0.9rem;
+  }
+  .post-card {
+    padding: 1.15rem 1.2rem;
+  }
+}
+
+@media (max-width: 460px) {
+  .site-header .container {
+    min-height: 54px;
+  }
+  .brand {
+    font-size: 0.95rem;
+  }
+  .brand .prompt {
+    display: none;
+  }
+  .site-nav {
+    gap: 0.95rem;
+    font-size: 0.85rem;
+  }
+}
+
+/* ---- Motion ----------------------------------------------------------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  @keyframes hod-rise {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes hod-blink {
+    0%,
+    45% {
+      opacity: 1;
+    }
+    50%,
+    95% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  /* Above-the-fold: animate once on load, with a small stagger. */
+  .hero > *,
+  .prose > h1,
+  .prose > .article-meta,
+  main > section:first-of-type {
+    animation: hod-rise var(--dur) var(--ease) both;
+  }
+  .hero > :nth-child(1) {
+    animation-delay: 0.03s;
+  }
+  .hero > :nth-child(2) {
+    animation-delay: 0.09s;
+  }
+  .hero > :nth-child(3) {
+    animation-delay: 0.15s;
+  }
+  .hero > :nth-child(4) {
+    animation-delay: 0.21s;
+  }
+
+  /* Below-the-fold: reveal on scroll. Only where the browser supports
+     scroll-driven animations — elsewhere the content is simply static. */
+  @supports (animation-timeline: view()) {
+    .post-card,
+    main > section:not(:first-of-type),
+    .prose > h2,
+    .prose > pre,
+    .prose > .table-wrap,
+    .prose > .two-col,
+    .prose > .verdict,
+    .prose > .callout,
+    .prose > .signup {
+      opacity: 0;
+      animation: hod-rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 22%;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }
