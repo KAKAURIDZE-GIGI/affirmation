@@ -59,6 +59,14 @@ export const posts: Post[] = [
     date: "2026-09-04",
     kind: "Tutorial",
   },
+  {
+    slug: "deploy-fastapi-linode",
+    title: "Deploy FastAPI on Linode with Docker & Caddy",
+    description:
+      "A copy-paste tutorial: provision a Linode instance, containerise a production FastAPI app, and get automatic HTTPS with Caddy — no manual Certbot steps.",
+    date: "2026-09-04",
+    kind: "Tutorial",
+  },
 ];
 
 export const sortedPosts = [...posts].sort((a, b) =>
