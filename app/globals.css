@@ -378,6 +378,14 @@ hr {
   color: var(--text);
   text-decoration: none;
 }
+.post-card h3 a::before {
+  /* Stretches this link over the whole card so the entire component is
+     clickable, not just the title text — one focusable link per card,
+     good for a11y (no duplicate/nested links) and for click-target size. */
+  content: "";
+  position: absolute;
+  inset: 0;
+}
 .post-card h3 a::after {
   content: " \2192" / "";
   display: inline-block;
