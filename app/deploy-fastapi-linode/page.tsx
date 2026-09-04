@@ -445,7 +445,13 @@ curl -sI https://api.example.com                              # through Caddy + 
         Deployment instead of a Compose service, and LKE handles the control
         plane. That&apos;s a bigger topic than fits here, but it&apos;s a
         straightforward next step precisely because you&apos;re already
-        shipping a container, not a bare script on a server.
+        shipping a container, not a bare script on a server. If one box is
+        still the right size but you&apos;re tired of SSHing in for every
+        update, the{" "}
+        <Link href="/github-actions-cicd-vps-deploy/">
+          GitHub Actions CI/CD guide
+        </Link>{" "}
+        automates exactly that instead.
       </p>
       <p>
         For now, you have a production FastAPI app on a{" "}

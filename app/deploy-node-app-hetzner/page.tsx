@@ -381,7 +381,12 @@ docker stats --no-stream       # quick CPU / memory snapshot`}</code>
         <li>
           Add a <code>deploy</code> step to CI that SSHes in and runs the
           step&nbsp;10 commands, or switch to <code>docker context</code> and
-          build locally.
+          build locally — the{" "}
+          <Link href="/github-actions-cicd-vps-deploy/">
+            GitHub Actions CI/CD guide
+          </Link>{" "}
+          walks through exactly that, automatically, on every push to{" "}
+          <code>main</code>.
         </li>
         <li>
           Put a real database in its own service with a named volume, and take

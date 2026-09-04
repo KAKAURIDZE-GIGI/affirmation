@@ -91,6 +91,14 @@ export const posts: Post[] = [
     date: "2026-09-03",
     kind: "Comparison",
   },
+  {
+    slug: "github-actions-cicd-vps-deploy",
+    title: "GitHub Actions CI/CD: Auto-Deploy Docker to a VPS",
+    description:
+      "A GitHub Actions pipeline that builds a Docker image and deploys it to any VPS over SSH on every push to main — provider-agnostic, works anywhere.",
+    date: "2026-09-04",
+    kind: "Tutorial",
+  },
 ];
 
 export const sortedPosts = [...posts].sort((a, b) =>

@@ -439,7 +439,11 @@ echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab`}</code>
           <strong>CI/CD.</strong> A GitHub Actions job that builds the image,
           pushes it to a registry, then SSHes in to run{" "}
           <code>docker compose pull &amp;&amp; docker compose up -d</code> turns
-          deploys into a <code>git push</code>.
+          deploys into a <code>git push</code> — see the{" "}
+          <Link href="/github-actions-cicd-vps-deploy/">
+            GitHub Actions CI/CD guide
+          </Link>{" "}
+          for the full workflow file, including this registry-based variant.
         </li>
         <li>
           <strong>Backups.</strong> Take Contabo snapshots on a schedule, and if
