@@ -64,7 +64,7 @@ export const posts: Post[] = [
     title: "Deploy FastAPI on Linode with Docker & Caddy",
     description:
       "A copy-paste tutorial: provision a Linode instance, containerise a production FastAPI app, and get automatic HTTPS with Caddy — no manual Certbot steps.",
-    date: "2026-09-03",
+    date: "2026-09-02",
     kind: "Tutorial",
   },
   {
@@ -72,6 +72,14 @@ export const posts: Post[] = [
     title: "Best VPS for Game Servers (Minecraft & More) 2026",
     description:
       "DigitalOcean, Vultr, Hetzner, Contabo and Linode compared for self-hosting a Minecraft, Valheim or other game server — RAM per dollar, latency and DDoS protection.",
+    date: "2026-09-03",
+    kind: "Comparison",
+  },
+  {
+    slug: "hostinger-vps-review",
+    title: "Hostinger VPS Review for Developers (2026)",
+    description:
+      "An honest look at Hostinger's KVM VPS line for developers — specs, hPanel vs cPanel, and where it holds up (or doesn't) against Hetzner or DigitalOcean.",
     date: "2026-09-04",
     kind: "Comparison",
   },
