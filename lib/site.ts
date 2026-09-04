@@ -107,6 +107,14 @@ export const posts: Post[] = [
     date: "2026-09-04",
     kind: "Comparison",
   },
+  {
+    slug: "cloudways-vs-raw-vps",
+    title: "Cloudways vs Raw VPS: Which Should You Pick? (2026)",
+    description:
+      "Cloudways' managed layer versus running your own raw VPS — pricing, setup time, performance and control, compared honestly so you can pick the right one.",
+    date: "2026-09-04",
+    kind: "Comparison",
+  },
 ];
 
 export const sortedPosts = [...posts].sort((a, b) =>
