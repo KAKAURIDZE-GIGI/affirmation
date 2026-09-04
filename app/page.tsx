@@ -31,21 +31,29 @@ export default function HomePage() {
           <Link href="/about/">the methodology</Link>, and here is the{" "}
           <Link href="/disclosure/">affiliate disclosure</Link>.
         </p>
-        <pre aria-hidden="true">
+        <pre className="term-boot" aria-hidden="true">
           <code>
-            <span className="c-prompt">$</span> ./review --provider any
-            --sponsored=false{"\n"}
-            <span className="c-out">
-              → same box, same benchmarks, every provider
+            <span className="term-line">
+              <span className="c-prompt">$</span> ./review --provider any
+              --sponsored=false
             </span>
-            {"\n"}
-            <span className="c-out">
-              → cpu · disk i/o · network · boot time
+            <span className="term-line">
+              <span className="c-out">
+                → same box, same benchmarks, every provider
+              </span>
             </span>
-            {"\n\n"}
-            <span className="c-prompt">$</span> grep -c sponsored verdict.md
-            {"\n"}
-            <span className="c-out">0</span>
+            <span className="term-line">
+              <span className="c-out">
+                → cpu · disk i/o · network · boot time
+              </span>
+            </span>
+            <span className="term-line term-line-gap">
+              <span className="c-prompt">$</span> grep -c sponsored verdict.md
+            </span>
+            <span className="term-line">
+              <span className="c-out">0</span>
+              <span className="term-cursor" />
+            </span>
           </code>
         </pre>
       </section>
@@ -53,10 +61,11 @@ export default function HomePage() {
       <section aria-labelledby="latest">
         <h2 id="latest">Latest</h2>
         <ul className="post-list">
-          {sortedPosts.map((post) => (
+          {sortedPosts.map((post, i) => (
             <li key={post.slug} className="post-card">
               <div className="meta">
                 <span className="badge">{post.kind}</span>
+                {i === 0 ? <span className="badge-new">New</span> : null}
                 <time dateTime={post.date}>{formatDate(post.date)}</time>
               </div>
               <h3>
