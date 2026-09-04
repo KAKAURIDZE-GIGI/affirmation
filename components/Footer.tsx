@@ -1,21 +1,18 @@
 import Link from "next/link";
 import { siteConfig } from "@/lib/site";
-import { withLocale, type Locale } from "@/lib/i18n";
-import type { UiDict } from "@/content/schema";
 
-export default function Footer({ lang, ui }: { lang: Locale; ui: UiDict }) {
+export default function Footer() {
   return (
     <footer className="site-footer">
       <div className="container">
         <p>
-          © {new Date().getFullYear()} {siteConfig.name}. {ui.footerTagline}
+          © {new Date().getFullYear()} {siteConfig.name}. Reader-supported —
+          some links are affiliate links.
         </p>
         <nav aria-label="Footer">
-          <Link href={withLocale(lang, "/about/")}>{ui.footerAbout}</Link>
-          <Link href={withLocale(lang, "/disclosure/")}>
-            {ui.footerDisclosure}
-          </Link>
-          <a href={`mailto:${siteConfig.contactEmail}`}>{ui.footerContact}</a>
+          <Link href="/about/">About</Link>
+          <Link href="/disclosure/">Affiliate disclosure</Link>
+          <a href={`mailto:${siteConfig.contactEmail}`}>Contact</a>
         </nav>
       </div>
     </footer>

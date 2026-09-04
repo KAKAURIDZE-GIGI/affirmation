@@ -1,43 +1,106 @@
-import type { Metadata } from "next";
-import { LOCALES, DEFAULT_LOCALE } from "@/lib/i18n";
+import Link from "next/link";
+import { siteConfig, sortedPosts, formatDate } from "@/lib/site";
+import { pageMeta } from "@/lib/seo";
 
-// The site lives under /<lang>/. This bare-domain page bounces visitors to the
-// best language match. On Vercel, vercel.json also 307s "/" -> "/en/" before
-// this file is ever served; this is the fallback for other static hosts.
-export const metadata: Metadata = {
-  robots: { index: false, follow: true },
-  alternates: { canonical: `/${DEFAULT_LOCALE}/` },
-};
+export const metadata = pageMeta({
+  title: "VPS Hosting Reviews for Developers — Host or Die",
+  description:
+    "Developer-run VPS and cloud hosting reviews: the same deployment and benchmarks on every provider — CPU, disk I/O, network, boot time. No sponsored rankings.",
+  path: "/",
+});
 
-const redirectScript = `(function () {
-  try {
-    var known = ${JSON.stringify(LOCALES)};
-    var saved = null;
-    try { saved = localStorage.getItem("hod-lang"); } catch (e) {}
-    var want = (saved || navigator.language || "en").slice(0, 2).toLowerCase();
-    var to = known.indexOf(want) > -1 ? want : "${DEFAULT_LOCALE}";
-    location.replace("/" + to + "/");
-  } catch (e) {
-    location.replace("/${DEFAULT_LOCALE}/");
-  }
-})();`;
-
-export default function RootIndex() {
+export default function HomePage() {
   return (
-    <html lang="en">
-      <body style={{ fontFamily: "system-ui, sans-serif", padding: "2rem" }}>
-        <script dangerouslySetInnerHTML={{ __html: redirectScript }} />
-        <p>
-          Redirecting to <a href={`/${DEFAULT_LOCALE}/`}>Host or Die</a>…
+    <>
+      <section className="hero">
+        <p className="eyebrow">Independent · benchmark-based</p>
+        <h1>
+          VPS &amp; cloud hosting reviews{" "}
+          <span className="accent-text">for developers</span>
+        </h1>
+        <p className="lead">
+          I deploy real applications to real servers, run the same battery of
+          benchmarks on each one — CPU, disk I/O, network throughput, boot time
+          — and write up what actually happened.
         </p>
-        <nav>
-          {LOCALES.map((l) => (
-            <a key={l} href={`/${l}/`} style={{ marginRight: "0.75rem" }}>
-              {l}
-            </a>
+        <p>
+          No provider pays for a place on this site and no review is sponsored.
+          Some links are affiliate links, which is how the hosting bill gets
+          paid; that never changes the numbers or the recommendation. Here is
+          how the testing works:{" "}
+          <Link href="/about/">the methodology</Link>, and here is the{" "}
+          <Link href="/disclosure/">affiliate disclosure</Link>.
+        </p>
+        <pre aria-hidden="true">
+          <code>
+            <span className="c-prompt">$</span> ./review --provider any
+            --sponsored=false{"\n"}
+            <span className="c-out">
+              → same box, same benchmarks, every provider
+            </span>
+            {"\n"}
+            <span className="c-out">
+              → cpu · disk i/o · network · boot time
+            </span>
+            {"\n\n"}
+            <span className="c-prompt">$</span> grep -c sponsored verdict.md
+            {"\n"}
+            <span className="c-out">0</span>
+          </code>
+        </pre>
+      </section>
+
+      <section aria-labelledby="latest">
+        <h2 id="latest">Latest</h2>
+        <ul className="post-list">
+          {sortedPosts.map((post) => (
+            <li key={post.slug} className="post-card">
+              <div className="meta">
+                <span className="badge">{post.kind}</span>
+                <time dateTime={post.date}>{formatDate(post.date)}</time>
+              </div>
+              <h3>
+                <Link href={`/${post.slug}/`}>{post.title}</Link>
+              </h3>
+              <p>{post.description}</p>
+            </li>
           ))}
-        </nav>
-      </body>
-    </html>
+        </ul>
+      </section>
+
+      <section aria-labelledby="signup">
+        {/* No-JS signup: submitting opens the reader's mail client with a
+            pre-addressed message. To run a managed list instead, point `action`
+            at a Formspree / Buttondown / ConvertKit endpoint — no other change
+            needed. */}
+        <form
+          className="signup"
+          action={`mailto:${siteConfig.contactEmail}`}
+          method="post"
+          encType="text/plain"
+        >
+          <label htmlFor="email" id="signup">
+            Get new reviews and benchmarks by email
+          </label>
+          <div className="signup-row">
+            <input
+              id="email"
+              type="email"
+              name="subscriber"
+              required
+              autoComplete="email"
+              placeholder="you@example.com"
+            />
+            <button type="submit" className="btn">
+              Subscribe
+            </button>
+          </div>
+          <p className="signup-note">
+            One email when a new benchmark or review goes live. No spam, no
+            sharing your address. Unsubscribe any time.
+          </p>
+        </form>
+      </section>
+    </>
   );
 }

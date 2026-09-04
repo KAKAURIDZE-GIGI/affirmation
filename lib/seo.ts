@@ -1,59 +1,45 @@
 import type { Metadata } from "next";
 import { siteConfig } from "./site";
-import {
-  LOCALES,
-  LOCALE_HREFLANG,
-  OG_LOCALE,
-  DEFAULT_LOCALE,
-  withLocale,
-  type Locale,
-} from "./i18n";
 
 type PageMetaInput = {
-  lang: Locale;
-  /** Locale-less route with trailing slash, e.g. "/about/" or "/". */
-  path: string;
-  /** Full <title>, used verbatim. Keep < 60 chars. */
+  /** Full <title>, used verbatim (no site-name template appended). Keep < 60 chars. */
   title: string;
-  /** Meta description, 150–160 chars. */
+  /** Meta description. Aim for 150–160 chars and give a reason to click. */
   description: string;
+  /** Route path with trailing slash, e.g. "/about/". Used for canonical + og:url. */
+  path: string;
   type?: "website" | "article";
+  /** ISO date (YYYY-MM-DD) — articles only. */
   published?: string;
+  /** ISO date (YYYY-MM-DD) — articles only. */
   modified?: string;
 };
 
-/** hreflang alternates: every locale for this path + x-default -> English. */
-function languageAlternates(path: string): Record<string, string> {
-  const out: Record<string, string> = {};
-  for (const l of LOCALES) out[LOCALE_HREFLANG[l]] = withLocale(l, path);
-  out["x-default"] = withLocale(DEFAULT_LOCALE, path);
-  return out;
-}
-
+/**
+ * One place that builds a complete, consistent metadata block for a page:
+ * absolute title, description, self-referential canonical, Open Graph and
+ * Twitter card. Relative URLs resolve against `metadataBase` (set in the root
+ * layout) to absolute URLs at build time.
+ */
 export function pageMeta({
-  lang,
-  path,
   title,
   description,
+  path,
   type = "website",
   published,
   modified,
 }: PageMetaInput): Metadata {
-  const canonical = withLocale(lang, path);
   return {
     title: { absolute: title },
     description,
-    alternates: {
-      canonical,
-      languages: languageAlternates(path),
-    },
+    alternates: { canonical: path },
     openGraph: {
       type,
       title,
       description,
-      url: canonical,
+      url: path,
       siteName: siteConfig.name,
-      locale: OG_LOCALE[lang],
+      locale: "en_US",
       ...(type === "article"
         ? {
             publishedTime: published,
@@ -70,41 +56,36 @@ export function pageMeta({
   };
 }
 
-const abs = (path: string) => new URL(path, siteConfig.url).toString();
+const absolute = (path: string) => new URL(path, siteConfig.url).toString();
 
+/** schema.org Article for a content post. */
 export function articleSchema(input: {
-  lang: Locale;
   headline: string;
   description: string;
-  /** locale-less path, e.g. "/digitalocean-vs-vultr/" */
   path: string;
   published: string;
   modified?: string;
 }) {
-  const url = abs(withLocale(input.lang, input.path));
   return {
     "@context": "https://schema.org",
     "@type": "Article",
     headline: input.headline,
     description: input.description,
-    inLanguage: LOCALE_HREFLANG[input.lang],
     datePublished: input.published,
     dateModified: input.modified ?? input.published,
     author: { "@type": "Person", name: siteConfig.author },
     publisher: {
       "@type": "Organization",
       name: siteConfig.name,
-      logo: { "@type": "ImageObject", url: abs("/icon.svg") },
+      logo: { "@type": "ImageObject", url: absolute("/icon.svg") },
     },
-    mainEntityOfPage: url,
-    url,
+    mainEntityOfPage: absolute(input.path),
+    url: absolute(input.path),
   } as const;
 }
 
-export function breadcrumbSchema(
-  lang: Locale,
-  crumbs: { name: string; path: string }[],
-) {
+/** schema.org BreadcrumbList — Home > … > current page. */
+export function breadcrumbSchema(crumbs: { name: string; path: string }[]) {
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -112,7 +93,7 @@ export function breadcrumbSchema(
       "@type": "ListItem",
       position: i + 1,
       name: c.name,
-      item: abs(withLocale(lang, c.path)),
+      item: absolute(c.path),
     })),
   } as const;
 }

@@ -2,34 +2,26 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { splitLocale, withLocale, type Locale } from "@/lib/i18n";
 
-export default function NavLinks({
-  lang,
-  labels,
-}: {
-  lang: Locale;
-  labels: { home: string; about: string; disclosure: string };
-}) {
-  const { rest } = splitLocale(usePathname() || "/");
-  const here = rest || "/";
+const links = [
+  { href: "/", label: "Home" },
+  { href: "/about/", label: "About" },
+  { href: "/disclosure/", label: "Disclosure" },
+];
 
-  const items = [
-    { path: "/", label: labels.home },
-    { path: "/about/", label: labels.about },
-    { path: "/disclosure/", label: labels.disclosure },
-  ];
+const trim = (s: string) => (s !== "/" && s.endsWith("/") ? s.slice(0, -1) : s);
+
+export default function NavLinks() {
+  const here = trim(usePathname() || "/");
 
   return (
     <nav className="site-nav" aria-label="Primary">
-      {items.map(({ path, label }) => {
-        const active = path === "/" ? here === "/" : here === path;
+      {links.map(({ href, label }) => {
+        const target = trim(href);
+        const active =
+          target === "/" ? here === "/" : here === target || here.startsWith(target + "/");
         return (
-          <Link
-            key={path}
-            href={withLocale(lang, path)}
-            aria-current={active ? "page" : undefined}
-          >
+          <Link key={href} href={href} aria-current={active ? "page" : undefined}>
             {label}
           </Link>
         );
