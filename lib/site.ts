@@ -83,6 +83,14 @@ export const posts: Post[] = [
     date: "2026-09-04",
     kind: "Comparison",
   },
+  {
+    slug: "best-vps-for-wordpress",
+    title: "Best VPS for WordPress in 2026",
+    description:
+      "Seven VPS and managed-VPS options compared for self-hosting WordPress — performance, caching, one-click installs, and cost versus managed WordPress hosting.",
+    date: "2026-09-05",
+    kind: "Comparison",
+  },
 ];
 
 export const sortedPosts = [...posts].sort((a, b) =>
