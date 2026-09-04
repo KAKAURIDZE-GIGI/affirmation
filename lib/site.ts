@@ -51,6 +51,14 @@ export const posts: Post[] = [
     updated: "2026-09-04",
     kind: "Tutorial",
   },
+  {
+    slug: "deploy-nextjs-contabo",
+    title: "Deploy Next.js on a Contabo VPS with Docker & Nginx",
+    description:
+      "A copy-paste tutorial: provision a Contabo VPS, containerise a production Next.js build, and serve it over HTTPS with an Nginx reverse proxy and Let's Encrypt.",
+    date: "2026-09-04",
+    kind: "Tutorial",
+  },
 ];
 
 export const sortedPosts = [...posts].sort((a, b) =>
