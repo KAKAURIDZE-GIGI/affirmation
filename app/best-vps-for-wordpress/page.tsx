@@ -41,7 +41,7 @@ export default function Page() {
 
       <h1>Best VPS for WordPress in 2026</h1>
       <p className="article-meta">
-        Comparison · published 5 September 2026 · specs pulled from this
+        Comparison · published 3 September 2026 · specs pulled from this
         site&apos;s own provider reviews — verify current pricing before you
         buy
       </p>

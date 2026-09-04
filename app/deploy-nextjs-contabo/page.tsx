@@ -43,7 +43,7 @@ export default function Page() {
 
       <h1>Deploy Next.js on a Contabo VPS with Docker and Nginx</h1>
       <p className="article-meta">
-        Tutorial · published 1 September 2026 · tested on Ubuntu 24.04 LTS
+        Tutorial · published 28 August 2026 · tested on Ubuntu 24.04 LTS
       </p>
 
       <p>

@@ -41,7 +41,7 @@ export default function Page() {
 
       <h1>Best VPS for Game Servers (Minecraft, Valheim, and More) in 2026</h1>
       <p className="article-meta">
-        Comparison · published 3 September 2026 · specs pulled from this
+        Comparison · published 1 September 2026 · specs pulled from this
         site&apos;s own provider reviews — verify current pricing before you
         buy
       </p>

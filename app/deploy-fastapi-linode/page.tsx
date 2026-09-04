@@ -40,7 +40,7 @@ export default function Page() {
 
       <h1>Deploy FastAPI on Linode with Docker and Caddy</h1>
       <p className="article-meta">
-        Tutorial · published 2 September 2026 · tested on Ubuntu 24.04 LTS
+        Tutorial · published 30 August 2026 · tested on Ubuntu 24.04 LTS
       </p>
 
       <p>

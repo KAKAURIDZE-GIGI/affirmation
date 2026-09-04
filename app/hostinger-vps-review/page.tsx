@@ -40,7 +40,7 @@ export default function Page() {
 
       <h1>Hostinger VPS: an honest review for developers</h1>
       <p className="article-meta">
-        Comparison · published 4 September 2026 · specs checked against
+        Comparison · published 2 September 2026 · specs checked against
         Hostinger&apos;s current VPS page — confirm pricing before you buy
       </p>
 

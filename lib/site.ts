@@ -56,7 +56,7 @@ export const posts: Post[] = [
     title: "Deploy Next.js on a Contabo VPS with Docker & Nginx",
     description:
       "A copy-paste tutorial: provision a Contabo VPS, containerise a production Next.js build, and serve it over HTTPS with an Nginx reverse proxy and Let's Encrypt.",
-    date: "2026-09-01",
+    date: "2026-08-28",
     kind: "Tutorial",
   },
   {
@@ -64,7 +64,7 @@ export const posts: Post[] = [
     title: "Deploy FastAPI on Linode with Docker & Caddy",
     description:
       "A copy-paste tutorial: provision a Linode instance, containerise a production FastAPI app, and get automatic HTTPS with Caddy — no manual Certbot steps.",
-    date: "2026-09-02",
+    date: "2026-08-30",
     kind: "Tutorial",
   },
   {
@@ -72,7 +72,7 @@ export const posts: Post[] = [
     title: "Best VPS for Game Servers (Minecraft & More) 2026",
     description:
       "DigitalOcean, Vultr, Hetzner, Contabo and Linode compared for self-hosting a Minecraft, Valheim or other game server — RAM per dollar, latency and DDoS protection.",
-    date: "2026-09-03",
+    date: "2026-09-01",
     kind: "Comparison",
   },
   {
@@ -80,7 +80,7 @@ export const posts: Post[] = [
     title: "Hostinger VPS Review for Developers (2026)",
     description:
       "An honest look at Hostinger's KVM VPS line for developers — specs, hPanel vs cPanel, and where it holds up (or doesn't) against Hetzner or DigitalOcean.",
-    date: "2026-09-04",
+    date: "2026-09-02",
     kind: "Comparison",
   },
   {
@@ -88,7 +88,7 @@ export const posts: Post[] = [
     title: "Best VPS for WordPress in 2026",
     description:
       "Seven VPS and managed-VPS options compared for self-hosting WordPress — performance, caching, one-click installs, and cost versus managed WordPress hosting.",
-    date: "2026-09-05",
+    date: "2026-09-03",
     kind: "Comparison",
   },
 ];
