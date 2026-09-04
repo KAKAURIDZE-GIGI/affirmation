@@ -56,7 +56,7 @@ export const posts: Post[] = [
     title: "Deploy Next.js on a Contabo VPS with Docker & Nginx",
     description:
       "A copy-paste tutorial: provision a Contabo VPS, containerise a production Next.js build, and serve it over HTTPS with an Nginx reverse proxy and Let's Encrypt.",
-    date: "2026-09-04",
+    date: "2026-09-01",
     kind: "Tutorial",
   },
   {
@@ -64,7 +64,7 @@ export const posts: Post[] = [
     title: "Deploy FastAPI on Linode with Docker & Caddy",
     description:
       "A copy-paste tutorial: provision a Linode instance, containerise a production FastAPI app, and get automatic HTTPS with Caddy — no manual Certbot steps.",
-    date: "2026-09-04",
+    date: "2026-09-03",
     kind: "Tutorial",
   },
   {
