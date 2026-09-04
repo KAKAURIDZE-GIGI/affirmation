@@ -673,6 +673,78 @@ tbody tr:last-child td {
   margin: 0;
 }
 
+/* ---- Benchmark page: pending cells + bar charts ---------------------------- */
+
+.pending {
+  color: var(--text-dim);
+  font-family: var(--mono);
+  font-size: 0.85em;
+  white-space: nowrap;
+}
+
+.bench-chart {
+  margin: 0 0 1.75rem;
+}
+.bench-chart figcaption {
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  color: var(--text);
+  margin-bottom: 0.6rem;
+}
+.bench-unit {
+  color: var(--text-dim);
+}
+.bench-bars {
+  display: grid;
+  gap: 0.5rem;
+}
+.bench-bar-row {
+  display: grid;
+  grid-template-columns: 7.5rem 1fr;
+  align-items: center;
+  gap: 0.75rem;
+}
+.bench-bar-name {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  color: var(--text-dim);
+}
+.bench-bar-track {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 1.9rem;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.bench-bar-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, var(--link-strong), var(--term));
+  opacity: 0.32;
+}
+.bench-bar-val {
+  position: relative;
+  padding: 0 0.6rem;
+  font-family: var(--mono);
+  font-size: 0.82rem;
+}
+.bench-chart-note {
+  margin: 0.5rem 0 0;
+  font-size: 0.82rem;
+  color: var(--text-dim);
+}
+@media (max-width: 480px) {
+  .bench-bar-row {
+    grid-template-columns: 5rem 1fr;
+    gap: 0.5rem;
+  }
+}
+
 /* ---- Mobile ------------------------------------------------------------- */
 
 @media (max-width: 640px) {
