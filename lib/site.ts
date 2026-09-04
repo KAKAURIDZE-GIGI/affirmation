@@ -67,6 +67,14 @@ export const posts: Post[] = [
     date: "2026-09-04",
     kind: "Tutorial",
   },
+  {
+    slug: "best-vps-for-game-servers",
+    title: "Best VPS for Game Servers (Minecraft & More) 2026",
+    description:
+      "DigitalOcean, Vultr, Hetzner, Contabo and Linode compared for self-hosting a Minecraft, Valheim or other game server — RAM per dollar, latency and DDoS protection.",
+    date: "2026-09-04",
+    kind: "Comparison",
+  },
 ];
 
 export const sortedPosts = [...posts].sort((a, b) =>
