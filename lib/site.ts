@@ -99,6 +99,14 @@ export const posts: Post[] = [
     date: "2026-09-04",
     kind: "Tutorial",
   },
+  {
+    slug: "vps-benchmarks-2026",
+    title: "VPS Benchmarks 2026: What the Published Data Shows",
+    description:
+      "A sourced summary of published DigitalOcean, Vultr, Hetzner and Contabo benchmarks and current list pricing — shown as ranges, not invented precise numbers.",
+    date: "2026-09-04",
+    kind: "Comparison",
+  },
 ];
 
 export const sortedPosts = [...posts].sort((a, b) =>

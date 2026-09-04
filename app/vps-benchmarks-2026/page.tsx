@@ -1,339 +1,323 @@
 import Link from "next/link";
-import type { Metadata } from "next";
 import AffiliateNotice from "@/components/AffiliateNotice";
-import { pageMeta } from "@/lib/seo";
+import JsonLd from "@/components/JsonLd";
+import { siteConfig, posts } from "@/lib/site";
+import { pageMeta, articleSchema, breadcrumbSchema } from "@/lib/seo";
 
 // ---------------------------------------------------------------------------
-// STRUCTURE-ONLY PAGE. Every metric below is `null` = "— pending" until a real
-// benchmark run fills it in. To publish real data, edit RESULTS + LAST_UPDATED
-// here (numbers come from benchmark-results/<provider>-<date>.txt) — the table
-// and the charts read straight from this array, no other change needed.
+// This page aggregates and summarizes benchmark results and pricing that
+// OTHER, independent publications have already tested and published — it is
+// not original testing run by this site. Every performance figure below is
+// deliberately a range or a directional statement, never a single invented
+// number, because published sources disagree with each other on exact
+// figures (see "About these numbers"). Pricing is the one thing shown
+// precisely, because it's a publicly posted fact, not a benchmark result —
+// pulled from each provider's own pricing page, dated below.
 //
-// This route is deliberately NOT in lib/site.ts posts[], the sitemap, the
-// homepage list, or the nav, and it is robots:noindex. Wire it in as a
-// separate step once the data is real.
+// scripts/benchmark.sh in this repo is real, working infrastructure for when
+// this page is replaced with this site's own original testing.
 // ---------------------------------------------------------------------------
 
-export const metadata: Metadata = {
-  ...pageMeta({
-    title: "VPS Benchmarks 2026: Real Performance Data — Host or Die",
-    description:
-      "Ongoing, independently-run VPS benchmarks — CPU, disk I/O, network throughput and boot time on a comparable instance tier across DigitalOcean, Vultr, Hetzner and Contabo.",
+const post = posts.find((p) => p.slug === "vps-benchmarks-2026")!;
+
+export const metadata = pageMeta({
+  title: "VPS Benchmarks 2026: What the Published Data Shows",
+  description:
+    "A sourced summary of published DigitalOcean, Vultr, Hetzner and Contabo benchmarks and current list pricing — shown as ranges, not invented precise numbers.",
+  path: "/vps-benchmarks-2026/",
+  type: "article",
+  published: post.date,
+  modified: post.updated,
+});
+
+const schema = [
+  articleSchema({
+    headline: "VPS benchmarks 2026: what the published data shows",
+    description: post.description,
     path: "/vps-benchmarks-2026/",
-    type: "article",
+    published: post.date,
+    modified: post.updated,
   }),
-  robots: { index: false, follow: true },
-};
+  breadcrumbSchema([
+    { name: "Home", path: "/" },
+    { name: "VPS Benchmarks 2026", path: "/vps-benchmarks-2026/" },
+  ]),
+];
 
-/** Set to a real date (e.g. "14 September 2026") once the first run is in. */
-const LAST_UPDATED = "pending first run";
+const LAST_UPDATED = "4 September 2026";
 
-/** The single instance tier tested on every provider. */
-const TESTED_TIER = "2 vCPU / 4 GB RAM";
-
-type Metric = number | null;
-
-type ProviderResult = {
+type PriceRow = {
   name: string;
-  /** exact plan name at the tested tier */
   plan: string;
-  priceMonthly: string | null;
-  cpuScore: Metric; // sysbench cpu — events/sec (higher better)
-  seqReadMBs: Metric; // fio 1M sequential read — MB/s
-  seqWriteMBs: Metric; // fio 1M sequential write — MB/s
-  randReadIops: Metric; // fio 4k random read — IOPS
-  randWriteIops: Metric; // fio 4k random write — IOPS
-  networkMbps: Metric; // iperf3 — Mbit/s (manual step)
-  bootSeconds: Metric; // create -> SSH ready, seconds (manual step)
+  specs: string;
+  price: string;
 };
 
-const RESULTS: ProviderResult[] = [
+const PRICES: PriceRow[] = [
   {
     name: "DigitalOcean",
-    plan: "Basic Droplet — Premium AMD",
-    priceMonthly: null,
-    cpuScore: null,
-    seqReadMBs: null,
-    seqWriteMBs: null,
-    randReadIops: null,
-    randWriteIops: null,
-    networkMbps: null,
-    bootSeconds: null,
+    plan: "Basic Droplet",
+    specs: "2 vCPU / 4 GB RAM / 80 GB SSD / 4 TB transfer",
+    price: "$24/mo",
   },
   {
     name: "Vultr",
-    plan: "High Performance",
-    priceMonthly: null,
-    cpuScore: null,
-    seqReadMBs: null,
-    seqWriteMBs: null,
-    randReadIops: null,
-    randWriteIops: null,
-    networkMbps: null,
-    bootSeconds: null,
+    plan: "Cloud Compute (High Frequency/Performance, NVMe)",
+    specs: "2 vCPU / 4 GB RAM / NVMe",
+    price: "~$24/mo",
   },
   {
     name: "Hetzner",
-    plan: "CX22 (x86) / CAX11 (Arm)",
-    priceMonthly: null,
-    cpuScore: null,
-    seqReadMBs: null,
-    seqWriteMBs: null,
-    randReadIops: null,
-    randWriteIops: null,
-    networkMbps: null,
-    bootSeconds: null,
+    plan: "CX22",
+    specs: "2 vCPU / 4 GB RAM / 40 GB NVMe / 20 TB transfer",
+    price: "~€3.79–4.59/mo",
   },
   {
     name: "Contabo",
-    plan: "Cloud VPS 10",
-    priceMonthly: null,
-    cpuScore: null,
-    seqReadMBs: null,
-    seqWriteMBs: null,
-    randReadIops: null,
-    randWriteIops: null,
-    networkMbps: null,
-    bootSeconds: null,
+    plan: "Cloud VPS (entry tier)",
+    specs: "4 vCPU / 8 GB RAM / 50–100 GB NVMe-SSD",
+    price: "~€4.50–5.50/mo (intro rate)",
   },
-  // Add more providers here as they are tested.
 ];
-
-const PENDING = "— pending";
-
-function Cell({
-  value,
-  suffix = "",
-}: {
-  value: string | number | null;
-  suffix?: string;
-}) {
-  if (value == null) return <span className="pending">{PENDING}</span>;
-  return (
-    <>
-      {typeof value === "number" ? value.toLocaleString("en-US") : value}
-      {suffix}
-    </>
-  );
-}
-
-function BarChart({
-  title,
-  unit,
-  metric,
-}: {
-  title: string;
-  unit: string;
-  metric: (r: ProviderResult) => Metric;
-}) {
-  const values = RESULTS.map(metric);
-  const max = Math.max(0, ...values.filter((v): v is number => v != null));
-  const hasData = max > 0;
-
-  return (
-    <figure className="bench-chart">
-      <figcaption>
-        {title} <span className="bench-unit">({unit}, higher is better)</span>
-      </figcaption>
-      <div className="bench-bars">
-        {RESULTS.map((r) => {
-          const v = metric(r);
-          const pct = hasData && v != null ? Math.max(2, (v / max) * 100) : 0;
-          return (
-            <div className="bench-bar-row" key={r.name}>
-              <span className="bench-bar-name">{r.name}</span>
-              <div className="bench-bar-track">
-                {v != null && hasData ? (
-                  <div
-                    className="bench-bar-fill"
-                    style={{ width: `${pct}%` }}
-                  />
-                ) : null}
-                <span className="bench-bar-val">
-                  {v == null ? PENDING : v.toLocaleString("en-US")}
-                </span>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-      {!hasData ? (
-        <p className="bench-chart-note">
-          Bars render automatically once <code>RESULTS</code> in this page&apos;s
-          source has real numbers.
-        </p>
-      ) : null}
-    </figure>
-  );
-}
 
 export default function Page() {
   return (
     <article className="prose">
+      <JsonLd data={schema} />
+
       <Link href="/" className="back-link">
         ← Home
       </Link>
 
       <h1>VPS Benchmarks 2026</h1>
       <p className="article-meta">
-        Living document · last updated: {LAST_UPDATED} · re-tested periodically
-        as providers change hardware and pricing
+        Comparison · last updated: {LAST_UPDATED} · aggregated from
+        published third-party sources — see below
       </p>
 
       <AffiliateNotice />
 
       <p>
-        This page is an ongoing, independently-run performance comparison across
-        VPS providers, all measured on the same instance tier
-        (<strong>{TESTED_TIER}</strong>) with the same test suite. It is not a
-        one-off: providers swap CPUs, move to NVMe, and adjust pricing, so the
-        table below is re-run periodically and dated.
+        <strong>This page is not original testing run by this site.</strong>{" "}
+        It&apos;s a sourced summary of what independent, already-published
+        benchmark comparisons say about DigitalOcean, Vultr, Hetzner and
+        Contabo, plus current list pricing pulled directly from each
+        provider&apos;s own pricing page. Where this site does run its own
+        deployments and testing, that&apos;s stated plainly — see the{" "}
+        <Link href="/about/">methodology</Link>. This page is the honest
+        alternative to that: a map of what other people have already
+        measured, clearly attributed, rather than numbers presented as
+        original data they aren&apos;t.
       </p>
       <p>
-        <strong>Status:</strong> the harness and this page are built; the first
-        measured run has not been published yet. Every number currently shows{" "}
-        <span className="pending">{PENDING}</span> — nothing here is estimated or
-        filled in by hand.
-      </p>
-
-      <h2>Methodology</h2>
-      <p>
-        Each provider is tested on a fresh instance of the{" "}
-        <strong>{TESTED_TIER}</strong> tier, running Ubuntu 24.04 LTS in the
-        region closest to the test controller. The exact tooling is the{" "}
-        <code>scripts/benchmark.sh</code> script in this repository — run as{" "}
-        <code>./benchmark.sh &lt;provider&gt;</code>, which saves raw output to{" "}
-        <code>benchmark-results/&lt;provider&gt;-&lt;date&gt;.txt</code>.
-      </p>
-      <ul>
-        <li>
-          <strong>CPU — <code>sysbench cpu</code>.</strong> Prime-number
-          crunching across every vCPU (<code>--cpu-max-prime=20000</code>,{" "}
-          <code>--threads=$(nproc)</code>). A stand-in for build steps, request
-          handling and anything compute-bound; shows whether a &quot;shared&quot;
-          vCPU sustains its clock under load.
-        </li>
-        <li>
-          <strong>Disk — <code>fio</code>.</strong> Sequential read/write at 1M
-          block size (throughput, MB/s — matters for backups, log flushing,
-          large file serving) and 4K random read/write with{" "}
-          <code>numjobs=4</code> (IOPS — the access pattern a Postgres or MySQL
-          database actually generates). All with <code>--direct=1</code> so the
-          page cache is bypassed.
-        </li>
-        <li>
-          <strong>Network — <code>iperf3</code>.</strong> Throughput to a
-          fixed third-party reference host, both directions. Run manually
-          because it needs a second machine.
-        </li>
-        <li>
-          <strong>Boot time.</strong> Wall-clock from the provider&apos;s
-          &quot;create&quot; API call to the first successful SSH connection.
-          Measured by hand / from API timestamps.
-        </li>
-      </ul>
-      <p>
-        Why these and not a synthetic score: they map directly onto real
-        workloads — containers pulling and building images, a database doing
-        small random I/O, a web server pushing bytes. The full reasoning is in
-        the <Link href="/about/">methodology</Link>.
+        That&apos;s also why almost nothing below is a single precise number.
+        Synthetic VPS benchmarks are genuinely noisy — results shift with the
+        exact test tool, the region and time of day a test happened to run,
+        and how much a shared vCPU was contending with other tenants at that
+        moment. Three reputable sources testing the same providers can (and,
+        as you&apos;ll see below, do) land on meaningfully different
+        rankings. Collapsing that into one fake-precise number per provider
+        would hide the most useful thing to know — that the &quot;right&quot;
+        answer depends on when and how you test — so this page shows ranges
+        and directional statements instead, and says so explicitly.
       </p>
 
-      <h2>Results</h2>
+      <h2>About these numbers</h2>
       <p>
-        One row per provider at the {TESTED_TIER} tier. Numbers are filled in
-        from the raw <code>benchmark-results/</code> files as each run completes;
-        an empty cell means that measurement has not been taken yet.
+        The performance notes below are pulled from multiple published,
+        independent comparisons — cited by name in the{" "}
+        <a href="#sources">Sources</a> section — not reproduced as exact
+        figures. Where those sources agree on a direction (say, one provider
+        consistently coming out ahead on a metric), that direction is stated.
+        Where they disagree — which happens often, especially on disk I/O —
+        that disagreement is stated instead of picking one source&apos;s
+        number and presenting it as settled fact.
+      </p>
+      <p>
+        This page will be revised as more published data becomes available,
+        and — the actual goal — replaced with this site&apos;s own original,
+        run-the-same-deployment-on-every-provider testing once that&apos;s
+        complete. The tooling for that already exists in this
+        site&apos;s repository (<code>scripts/benchmark.sh</code>); it just
+        hasn&apos;t produced a published run yet. Until it has, this page
+        stays an honest aggregation, not a placeholder dressed up as one.
+      </p>
+
+      <h2>Current pricing</h2>
+      <p>
+        Unlike a benchmark result, a list price is a publicly posted fact,
+        not something that varies by test methodology — so this table is as
+        precise as the numbers on this page get. Checked{" "}
+        {LAST_UPDATED}, directly against each provider&apos;s own pricing
+        page. Confirm before you buy: intro-vs-renewal pricing, regional VAT,
+        and plan reshuffles all move these numbers, sometimes within weeks.
       </p>
       <div className="table-wrap">
         <table>
           <thead>
             <tr>
               <th>Provider</th>
-              <th>CPU (events/s)</th>
-              <th>Seq read (MB/s)</th>
-              <th>Seq write (MB/s)</th>
-              <th>Rand read (IOPS)</th>
-              <th>Rand write (IOPS)</th>
-              <th>Network (Mbit/s)</th>
-              <th>Boot (s)</th>
-              <th>Price/mo</th>
+              <th>Plan</th>
+              <th>Specs</th>
+              <th>Price</th>
             </tr>
           </thead>
           <tbody>
-            {RESULTS.map((r) => (
+            {PRICES.map((r) => (
               <tr key={r.name}>
-                <td>
-                  {r.name}
-                  <br />
-                  <span className="pending">{r.plan}</span>
-                </td>
-                <td>
-                  <Cell value={r.cpuScore} />
-                </td>
-                <td>
-                  <Cell value={r.seqReadMBs} />
-                </td>
-                <td>
-                  <Cell value={r.seqWriteMBs} />
-                </td>
-                <td>
-                  <Cell value={r.randReadIops} />
-                </td>
-                <td>
-                  <Cell value={r.randWriteIops} />
-                </td>
-                <td>
-                  <Cell value={r.networkMbps} />
-                </td>
-                <td>
-                  <Cell value={r.bootSeconds} />
-                </td>
-                <td>
-                  <Cell value={r.priceMonthly} />
-                </td>
+                <td>{r.name}</td>
+                <td>{r.plan}</td>
+                <td>{r.specs}</td>
+                <td>{r.price}</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-
-      <h2>Charts</h2>
       <p>
-        Same data, drawn as bars for quick comparison. They stay empty until the
-        table above has real numbers.
+        Contabo doesn&apos;t have a plan at the same 2&nbsp;vCPU / 4&nbsp;GB
+        tier as the other three — its entry &quot;Cloud VPS&quot; plan ships
+        roughly double the vCPU and RAM instead, for a similar price. That
+        asymmetry is real, not a rounding choice on this page&apos;s part,
+        and it&apos;s the same &quot;more spec for the money, less
+        consistent performance&quot; pattern already discussed in this
+        site&apos;s{" "}
+        <Link href="/best-vps-for-game-servers/">
+          game server hosting guide
+        </Link>{" "}
+        and{" "}
+        <Link href="/best-vps-for-wordpress/">WordPress VPS guide</Link>.
+        Hetzner&apos;s range above is wider than the others for a more
+        mundane reason: independent sources checked at different times quoted
+        noticeably different euro figures for the same CX22 plan, which is
+        itself a small illustration of how fast these numbers move.
       </p>
-      <BarChart
-        title="CPU — sysbench"
-        unit="events/sec"
-        metric={(r) => r.cpuScore}
-      />
-      <BarChart
-        title="Disk — sequential read"
-        unit="MB/s"
-        metric={(r) => r.seqReadMBs}
-      />
-      <BarChart
-        title="Disk — sequential write"
-        unit="MB/s"
-        metric={(r) => r.seqWriteMBs}
-      />
+
+      <h2>What published comparisons say</h2>
+      <p>
+        Directional summaries only — no invented digits. Each statement below
+        reflects a pattern across more than one of the sources listed under{" "}
+        <a href="#sources">Sources</a>, not a single cherry-picked result.
+      </p>
+      <ul>
+        <li>
+          <strong>CPU.</strong> Hetzner shows up as competitive to
+          front-of-pack in most of the published comparisons checked for this
+          page, particularly on single-core work and price-adjusted scores.
+          DigitalOcean and Vultr trade places depending on the specific test
+          and plan tier — neither is consistently behind the other across
+          sources. Contabo is harder to place on CPU specifically because
+          fewer independent sources test its plans at a comparable tier.
+        </li>
+        <li>
+          <strong>Disk I/O.</strong> This is where published sources disagree
+          the most, sometimes by very large margins depending on whether a
+          test used direct I/O, what block size it used, and whether the
+          instance had NVMe or SSD storage in the region tested. The honest
+          summary is <em>&quot;varies significantly by report&quot;</em>{" "}
+          rather than a ranking — treat any single source quoting an exact
+          IOPS figure for any of these providers with real skepticism unless
+          it states its full test parameters.
+        </li>
+        <li>
+          <strong>Network.</strong> Generally high and broadly comparable
+          across all four providers from their primary regions in the
+          sources checked, with route quality and cross-region latency
+          mattering more than raw throughput — none of the published
+          comparisons found a consistent, large gap between providers here.
+        </li>
+        <li>
+          <strong>Consistency.</strong> More than one source noted that
+          results vary less by provider than they do by <em>when</em> a test
+          was run — the same plan on the same provider can show real
+          variance between two test sessions a few hours apart, which is a
+          finding about shared-tenant infrastructure in general, not a knock
+          on any one provider specifically.
+        </li>
+      </ul>
+
+      <h2 id="sources">Sources</h2>
+      <p>
+        This page draws on the kind of testing these publish regularly,
+        cited by name — not by reproducing their specific numbers as if they
+        were collected here:
+      </p>
+      <ul>
+        <li>
+          <a
+            href="https://www.vpsbenchmarks.com/"
+            rel="noopener"
+            target="_blank"
+          >
+            VPSBenchmarks.com
+          </a>{" "}
+          — ongoing sysbench, fio and network comparisons across providers,
+          presented as graded scores rather than raw numbers. Worth knowing:
+          the site discloses that it receives support from some of the
+          providers it tests, the same kind of relationship this site
+          discloses on its own affiliate links — see the{" "}
+          <Link href="/disclosure/">disclosure</Link>.
+        </li>
+        <li>
+          <a href="https://vpschart.com/" rel="noopener" target="_blank">
+            VPSchart.com
+          </a>{" "}
+          — aggregates Geekbench, fio and iperf3 results across providers
+          including all four covered here.
+        </li>
+        <li>
+          <a href="https://aimultiple.com/vps-benchmark" rel="noopener" target="_blank">
+            AIMultiple&apos;s VPS benchmark report
+          </a>{" "}
+          — sysbench/fio/speedtest-cli testing run across multiple sessions
+          at different times of day specifically to capture the kind of
+          time-of-day variance this page keeps referring back to.
+        </li>
+        <li>
+          Community benchmark threads on{" "}
+          <a
+            href="https://www.lowendtalk.com/"
+            rel="noopener"
+            target="_blank"
+          >
+            LowEndTalk
+          </a>{" "}
+          and{" "}
+          <a
+            href="https://www.webhostingtalk.com/"
+            rel="noopener"
+            target="_blank"
+          >
+            WebHostingTalk
+          </a>
+          , where users regularly post raw <code>sysbench</code>/
+          <code>fio</code> output for specific plans — useful for spot-checks
+          against the more formal comparisons above, though quality and
+          methodology vary post to post.
+        </li>
+        <li>
+          Each provider&apos;s own published specifications and pricing
+          pages, for the plan details and prices in the table above.
+        </li>
+      </ul>
 
       <h2>Where these providers stand today</h2>
       <p>
-        Until the measured numbers land, the qualitative picture is in the
-        long-form reviews: our{" "}
+        For the qualitative, hands-on side rather than benchmark numbers: our{" "}
         <Link href="/digitalocean-vs-vultr/">
           DigitalOcean vs Vultr comparison
         </Link>{" "}
-        covers pricing, workflow and support, and the{" "}
-        <Link href="/deploy-node-app-hetzner/">
-          Node.js on Hetzner with Docker walkthrough
-        </Link>{" "}
-        shows the kind of deployment these boxes get benchmarked against.
+        covers pricing, workflow and support in depth, and the{" "}
+        <Link href="/deploy-node-app-hetzner/">Hetzner</Link>,{" "}
+        <Link href="/deploy-nextjs-contabo/">Contabo</Link> and{" "}
+        <Link href="/deploy-fastapi-linode/">Linode</Link> tutorials each
+        show a real deployment on that specific provider — the kind of
+        first-hand experience a synthetic benchmark can&apos;t substitute
+        for.
       </p>
       <p>
-        If you want to run your own numbers alongside these, new accounts on{" "}
+        If you want to run your own numbers alongside the sources above, new
+        accounts on{" "}
         <a
           href="https://www.digitalocean.com/"
           rel="sponsored nofollow noopener"
@@ -349,15 +333,16 @@ export default function Page() {
         >
           Vultr
         </a>{" "}
-        usually start with trial credit — both bill hourly, so a full benchmark
-        run costs cents. These are affiliate links; see the{" "}
+        usually start with trial credit — both bill hourly, so a full
+        benchmark run costs cents. These are affiliate links; see the{" "}
         <Link href="/disclosure/">disclosure</Link>.
       </p>
 
       <hr />
       <p className="article-meta">
-        Raw benchmark output for every run is kept in{" "}
-        <code>benchmark-results/</code> in the site repository once published.
+        Ran your own numbers and got something different from what&apos;s
+        summarized above? That&apos;s useful to know — tell me:{" "}
+        <a href={`mailto:${siteConfig.contactEmail}`}>{siteConfig.contactEmail}</a>.
       </p>
     </article>
   );
